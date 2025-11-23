@@ -21,11 +21,48 @@ def add_task():
 
 
 def view_tasks():
-	pass
+	if not tasks:
+		print("ยังไม่มีงานในรายการ")
+		return
+	print(f"{'No.':<4} {'Title':<30} {'Due Date':<12} {'Status':<10}")
+	for idx, t in enumerate(tasks, start=1):
+		status = "เสร็จแล้ว" if t.get("completed") else "ยังไม่เสร็จ"
+		title = t.get("title", "")[:30]
+		due = t.get("due_date", "") or "-"
+		print(f"{idx:<4} {title:<30} {due:<12} {status:<10}")
 
 
 def edit_task():
-	pass
+	if not tasks:
+		print("ยังไม่มีงานในรายการ")
+		return
+	# แสดงรายการเพื่อให้ผู้ใช้เลือก index
+	view_tasks()
+	idx_str = input("ระบุหมายเลขงานที่จะเแก้ไข (index): ").strip()
+	try:
+		idx = int(idx_str)
+	except ValueError:
+		print("ดัชนีไม่ถูกต้อง")
+		return
+	if idx < 1 or idx > len(tasks):
+		print("ดัชนีไม่ถูกต้อง")
+		return
+	task = tasks[idx - 1]
+	print(f"กำลังแก้ไขงาน id={task.get('id')}")
+	new_title = input(f"ชื่อเรื่อง [{task.get('title')}]: ").strip()
+	if new_title:
+		task['title'] = new_title
+	new_description = input(f"รายละเอียด [{task.get('description')}]: ").strip()
+	if new_description:
+		task['description'] = new_description
+	# ให้ผู้ใช้เปลี่ยนสถานะ completed (y/n) หรือเว้นว่างเพื่อไม่เปลี่ยน
+	current_status = 'y' if task.get('completed') else 'n'
+	comp = input(f"สถานะเสร็จแล้ว? (y/n) [{current_status}]: ").strip().lower()
+	if comp == 'y':
+		task['completed'] = True
+	elif comp == 'n':
+		task['completed'] = False
+	print("อัปเดตงานเรียบร้อย")
 
 
 def delete_task():
