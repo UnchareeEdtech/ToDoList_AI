@@ -66,7 +66,27 @@ def edit_task():
 
 
 def delete_task():
-	pass
+	if not tasks:
+		print("ยังไม่มีงานในรายการ")
+		return
+	# แสดงรายการเพื่อให้ผู้ใช้เลือก index
+	view_tasks()
+	idx_str = input("ระบุหมายเลขงานที่จะลบ (index): ").strip()
+	try:
+		idx = int(idx_str)
+	except ValueError:
+		print("ดัชนีไม่ถูกต้อง")
+		return
+	if idx < 1 or idx > len(tasks):
+		print("ดัชนีไม่ถูกต้อง")
+		return
+	task = tasks[idx - 1]
+	confirm = input(f"ต้องการลบงานนี้จริงหรือไม่ (y/n): ").strip().lower()
+	if confirm == 'y':
+		removed = tasks.pop(idx - 1)
+		print(f"ลบงานเรียบร้อย (id={removed.get('id')}, title={removed.get('title')})")
+	else:
+		print("ยกเลิกการลบ")
 
 
 def exit_program():
