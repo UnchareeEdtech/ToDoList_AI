@@ -21,7 +21,15 @@ def add_task():
 
 
 def view_tasks():
-	pass
+	if not tasks:
+		print("ยังไม่มีงานในรายการ")
+		return
+	print(f"{'No.':<4} {'Title':<30} {'Due Date':<12} {'Status':<10}")
+	for idx, t in enumerate(tasks, start=1):
+		status = "เสร็จแล้ว" if t.get("completed") else "ยังไม่เสร็จ"
+		title = t.get("title", "")[:30]
+		due = t.get("due_date", "") or "-"
+		print(f"{idx:<4} {title:<30} {due:<12} {status:<10}")
 
 
 def edit_task():
