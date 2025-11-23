@@ -1,4 +1,34 @@
+import json
+import os
+
+TASKS_FILE = "tasks.json"
+
 tasks = []
+
+
+def save_tasks():
+	try:
+		with open(TASKS_FILE, "w", encoding="utf-8") as f:
+			json.dump(tasks, f, ensure_ascii=False, indent=2)
+	except Exception as e:
+		print(f"ไม่สามารถบันทึกไฟล์: {e}")
+
+
+def load_tasks():
+	global tasks
+	if os.path.exists(TASKS_FILE):
+		try:
+			with open(TASKS_FILE, "r", encoding="utf-8") as f:
+				data = json.load(f)
+			if isinstance(data, list):
+				tasks = data
+			else:
+				tasks = []
+		except Exception as e:
+			print(f"ไม่สามารถโหลดไฟล์: {e}")
+			tasks = []
+	else:
+		tasks = []
 
 
 def add_task():
@@ -90,10 +120,12 @@ def delete_task():
 
 
 def exit_program():
-	pass
+	save_tasks()
+	print("บันทึกข้อมูลงานเรียบร้อย กำลังออกจากโปรแกรม...")
 
 
 def main():
+	load_tasks()
 	while True:
 		print("===== เมนู ToDo List =====")
 		print("1. เพิ่มงานใหม่")
